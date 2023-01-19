@@ -33,11 +33,20 @@ module.exports = (sequelize) => {
       speed: {
         type: DataTypes.INTEGER,
       },
-      types1: {
+      tipos: {
+        type: DataTypes.ARRAY(STRING),
+      },
+      habilidades: {
+        type: DataTypes.ARRAY(STRING),
+      },
+      japones: {
         type: DataTypes.STRING,
       },
-      types2: {
+      modelo: {
         type: DataTypes.STRING,
+      },
+      real: {
+        type: DataTypes.BOOLEAN,
       },
     },
     {

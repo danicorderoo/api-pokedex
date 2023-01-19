@@ -9,7 +9,7 @@ const router = Router();
 router.use("/pokemons", pokemonsRouter);
 
 router.use("/", (req, res) => {
-  res.send("root main");
+  res.send("root: /pokemons");
 });
 
 module.exports = router;

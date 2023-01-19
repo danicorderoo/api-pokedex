@@ -1,6 +1,4 @@
-const axios = require("axios");
-
-const pokeWiki = [
+export const pokeWiki = [
   {
     japones: "フシギダネ",
     modelo:
@@ -21,12 +19,6 @@ const pokeWiki = [
   },
   {
     japones: "ヒトカゲ",
-    modelo:
-      "https://images.wikidexcdn.net/mwuploads/wikidex/f/f5/latest/20200102192846/Charmander_EpEc.gif",
-    real: true,
-  },
-  {
-    japones: "リザード",
     modelo:
       "https://images.wikidexcdn.net/mwuploads/wikidex/0/00/latest/20200203225949/Charmeleon_EpEc.gif",
     real: true,
@@ -908,51 +900,3 @@ const pokeWiki = [
     real: true,
   },
 ];
-
-const getData = async (req, res, Pokemon) => {
-  const pokes = await axios.get(
-    "https://pokeapi.co/api/v2/pokemon?limit=151&offset=0"
-  );
-
-  const pokePromise = pokes.data.results.map((pokemon) =>
-    axios.get(pokemon.url)
-  );
-
-  await axios
-    .all(pokePromise)
-    .then((pokemones) => {
-      pokemones = pokemones?.map((pokemon, index) => ({
-        id: pokemon.data.id,
-        nombre: pokemon.data.name,
-        hp: pokemon.data.stats[0].base_stat,
-        attack: pokemon.data.stats[1].base_stat,
-        defense: pokemon.data.stats[2].base_stat,
-        special_attack: pokemon.data.stats[3].base_stat,
-        special_defense: pokemon.data.stats[4].base_stat,
-        speed: pokemon.data.stats[5].base_stat,
-        tipos: [
-          pokemon.data.types[0]?.type.name,
-          pokemon.data.types[1]?.type.name,
-        ],
-        habilidades: [
-          pokemon.data.abilities[0]?.ability.name,
-          pokemon.data.abilities[1]?.ability.name,
-        ],
-        japones: pokeWiki[index]?.japones,
-        modelo: pokeWiki[index]?.modelo,
-        real: pokeWiki[index]?.real,
-      }));
-
-      Pokemon?.bulkCreate(pokemones);
-      console.log("DB inicializada");
-      res.status(200).send(pokemones);
-    })
-    .catch((error) => {
-      console.log(error);
-      res
-        .status(400)
-        .send({ error: "Something went wrong while loading pokemons..." });
-    });
-};
-
-module.exports = getData;
